@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, DateTime
-
+import models
 
 Base = declarative_base()
 
@@ -21,16 +21,20 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
+            models.storage.new(self)
         else:
             from os import getenv
             if getenv('HBNB_TYPE_STORAGE') != 'db':
-                kwargs['updated_at'] = datetime.strptime(
-                    kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f'
-                )
-                kwargs['created_at'] = datetime.strptime(
-                    kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f'
-                )
-                del kwargs['__class__']
+                if 'update_at' in kwargs.keys():
+                    kwargs['updated_at'] = datetime.strptime(
+                        kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f'
+                    )
+                if 'created_at' in kwargs.keys():
+                    kwargs['created_at'] = datetime.strptime(
+                        kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f'
+                    )
+                if '__class__' in kwargs.keys():
+                    del kwargs['__class__']
 
             if 'created_at' not in kwargs.keys():
                 self.id = str(uuid.uuid4())
@@ -39,6 +43,7 @@ class BaseModel:
 
             for key,  value in kwargs.items():
                 setattr(self, key, value)
+        models.storage.new(self)
 
     def __str__(self):
         """Returns a string representation of the instance"""
@@ -50,8 +55,8 @@ class BaseModel:
         """Updates updated_at with current time when instance is changed"""
         from models import storage
         self.updated_at = datetime.now()
-        storage.new(self)
-        storage.save()
+        models.storage.new(self)
+        models.storage.save()
 
     def to_dict(self):
         """Convert instance into dict format"""

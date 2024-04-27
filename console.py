@@ -2,9 +2,8 @@
 """ Console Module """
 import cmd
 import sys
-import re
 from models.base_model import BaseModel
-from models.__init__ import storage
+from models import storage
 from models.user import User
 from models.place import Place
 from models.state import State
@@ -116,35 +115,24 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
+        _cls = args.split()[0]
+        if not _cls:
             print("** class name missing **")
             return
-        clas = args.split(" ")[0]
-        args = args.split(" ")[1:]
         
-        if clas not in HBNBCommand.classes:
+        elif _cls not in type(self).classes:
             print("** class doesn't exist **")
             return
-        instance = HBNBCommand.classes[clas]()
-
+        args = args.split()[1:]
+        print(args)
         kwargs = {}
-        for el in args:
-            name, value = tuple(el.split("="))
-
-            if re.match(r"^-?\d+\.\d+$", value):
-                value = float(value)
-            elif re.match(r"^-?\d+$", value):
-                value = int(value)
-            else:
-                value = value.strip('"')
-                if "\"" in value:
-                    value = value.replace('"', '\\"')
-                value = value.replace("_", " ")
-            kwargs[name] = value
-        instance.__dict__.update(kwargs)
-        storage.save()
-        print(instance.id)
-        instance.save()
+        for arg in args:
+            arg = arg.split("=")
+            if len(arg) == 2:
+                kwargs.update({arg[0]:arg[1]})
+        new_instance = globals()[_cls](**kwargs)
+        
+        print(new_instance.id)
         storage.save()
 
     def help_create(self):
@@ -304,7 +292,7 @@ class HBNBCommand(cmd.Cmd):
             if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] == '\"':
+            if args[2] and args[2][0] != '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg

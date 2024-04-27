@@ -1,1 +1,23 @@
-{"State.2a4ea571-7cf7-4fe2-b3ea-19029c650e47": {"__class__": "State", "id": "2a4ea571-7cf7-4fe2-b3ea-19029c650e47", "created_at": "2024-02-22T03:15:26.799949", "updated_at": "2024-02-22T03:15:26.799974", "name": "California"}, "State.6534eb44-cab9-4bc7-83a8-49118e1daac9": {"__class__": "State", "id": "6534eb44-cab9-4bc7-83a8-49118e1daac9", "created_at": "2024-02-22T03:15:26.801668", "updated_at": "2024-02-22T03:15:26.801685", "name": "Nevada"}}
+{
+    "Place.39df74f0-6961-4946-9d68-c525895d9533": {
+        "__class__": "Place",
+        "id": "39df74f0-6961-4946-9d68-c525895d9533",
+        "created_at": "2024-04-27T12:54:05.177561",
+        "updated_at": "2024-04-27T12:54:05.177573"
+    },
+    "Place.aa5993f0-6608-45ac-9e1a-1edb06b4d561": {
+        "__class__": "Place",
+        "id": "aa5993f0-6608-45ac-9e1a-1edb06b4d561",
+        "created_at": "2024-04-27T12:54:08.492420",
+        "updated_at": "2024-04-27T12:54:08.492437",
+        "city_id": "\"0001\"",
+        "user_id": "\"0001\"",
+        "name": "\"My_little_house\"",
+        "number_rooms": "4",
+        "number_bathrooms": "2",
+        "max_guest": "10",
+        "price_by_night": "300",
+        "latitude": "37.773972",
+        "longitude": "-122.431297"
+    }
+}
