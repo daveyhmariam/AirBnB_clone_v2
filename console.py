@@ -129,6 +129,11 @@ class HBNBCommand(cmd.Cmd):
         for arg in args:
             arg = arg.split("=")
             if len(arg) == 2:
+                if type(arg[1]) == str:
+                    arg[1].replace("_", " ")
+                    arg[1] = arg[1].replace("\"", "")
+                else:
+                    arg[1] = eval(arg[1])
                 kwargs.update({arg[0]:arg[1]})
         new_instance = globals()[_cls](**kwargs)
         

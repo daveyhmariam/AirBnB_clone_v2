@@ -25,14 +25,9 @@ class BaseModel:
         else:
             from os import getenv
             if getenv('HBNB_TYPE_STORAGE') != 'db':
-                if 'update_at' in kwargs.keys():
-                    kwargs['updated_at'] = datetime.strptime(
-                        kwargs['updated_at'], '%Y-%m-%dT%H:%M:%S.%f'
-                    )
-                if 'created_at' in kwargs.keys():
-                    kwargs['created_at'] = datetime.strptime(
-                        kwargs['created_at'], '%Y-%m-%dT%H:%M:%S.%f'
-                    )
+                for k in ['updated_at', 'created_at']:
+                    if k in kwargs.keys():
+                        kwargs[k] = datetime.fromisoformat(kwargs[k])
                 if '__class__' in kwargs.keys():
                     del kwargs['__class__']
 
@@ -70,8 +65,8 @@ class BaseModel:
         if "_sa_instance_state" in self.__dict__.keys():
             del self.__dict__["_sa_instance_state"]
         dictionary.update(self.__dict__)
-        dictionary['created_at'] = self.created_at.isoformat()
-        dictionary['updated_at'] = self.updated_at.isoformat()
+        dictionary['created_at'] = self.__dict__['created_at'].isoformat()
+        dictionary['updated_at'] = self.__dict__['updated_at'].isoformat()
         return dictionary
 
     def delete(self):
