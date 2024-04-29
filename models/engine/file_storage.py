@@ -15,17 +15,18 @@ class FileStorage:
         all_objs = type(self).__objects
         objects = {}
         for key in all_objs:
-            if cls.__name__ == key.split(".")[0]:
+            key = key.split(".")
+            key_cls = key[0]
+            if cls.__name__ == key_cls:
                 objects.update({key: all_objs[key]})
         return objects
 
     def delete(self, obj=None):
         '''delete object from __objects'''
-        if obj is None:
-            return
-        key = type(obj).__name__ + "." + obj.id
-        if key in type(self).__objects.key():
-            del type(self).__objects[key]
+        if obj:
+            key = type(obj).__name__ + "." + obj.id
+            if key in type(self).__objects.key():
+                del type(self).__objects[key]
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
