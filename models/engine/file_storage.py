@@ -10,22 +10,22 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-        if cls is None:
-            return type(self).__objects
-        all_objs = type(self).__objects
-        objects = {}
-        for key in all_objs:
-            key = key.split(".")
-            key_cls = key[0]
-            if cls.__name__ == key_cls:
-                objects.update({key: all_objs[key]})
-        return objects
+        if cls:
+            obj = dict()
+            all_objs = type(self).__objects
+            for key in list(all_objs):
+                key_split = key.split(".")
+                cls_name = key_split[0]
+                if cls_name == cls.__name__:
+                    obj.update({key:type(self).__objects})
+            return obj
+        return type(self).__objects
 
     def delete(self, obj=None):
         '''delete object from __objects'''
         if obj:
             key = type(obj).__name__ + "." + obj.id
-            if key in type(self).__objects.key():
+            if key in type(self).__objects.keys():
                 del type(self).__objects[key]
 
     def new(self, obj):
