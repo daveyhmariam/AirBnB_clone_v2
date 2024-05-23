@@ -65,6 +65,6 @@ class FileStorage:
                     self.all()[key] = classes[val['__class__']](**val)
         except (FileNotFoundError, json.decoder.JSONDecodeError):
             pass
-if __name__ == "__main__":
-    base = BaseModel()
-    base.save()
+    def close(self):
+        reload()
+        
