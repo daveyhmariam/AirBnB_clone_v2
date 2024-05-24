@@ -17,7 +17,7 @@ class FileStorage:
                 key_split = key.split(".")
                 cls_name = key_split[0]
                 if cls_name == cls.__name__:
-                    obj.update({key:type(self).__objects})
+                    obj.update({key:type(self).__objects[key]})
             return obj
         return type(self).__objects
 
@@ -35,12 +35,17 @@ class FileStorage:
     def save(self):
         """serializes __objects to the JSON file (path: __file_path)
         """
-        dict = {}
+        try:
+            with open(type(self).__file_path, 'w') as f:
+                temp = {}
+                temp.update(type(self).__objects)
+                for key, val in temp.items():
+                    temp[key] = val.to_dict()
+                json.dump(temp, f, indent=4)
 
-        for key, value in type(self).__objects.items():
-            dict[key] = value.to_dict()
-        with open(type(self).__file_path, "w") as file:
-            json.dump(dict, file, indent=4)
+        except (FileNotFoundError, json.decoder.JSONDecodeError):
+            pass
+
 
     def reload(self):
         """Loads storage dictionary from file"""
@@ -66,5 +71,4 @@ class FileStorage:
         except (FileNotFoundError, json.decoder.JSONDecodeError):
             pass
     def close(self):
-        reload()
-        
+        self.reload()
